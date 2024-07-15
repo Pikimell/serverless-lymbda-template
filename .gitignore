@@ -1,0 +1,10 @@
+node_modules
+.serverless
+
+node_modules
+.env
+
+.vscode
+.DS_Store
+.idea
+.webpack

@@ -1,0 +1,33 @@
+{
+  "name": "aws-backend",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "sls offline start",
+    "push": "git add . && git commit -m 'update' && git push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pikimell"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pikimell"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "globals": "^15.3.0",
+    "nodemon": "^3.1.0",
+    "serverless-bundle": "^6.0.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-offline": "^12.0.4"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "http-errors": "^2.0.0",
+    "joi": "^17.13.1",
+    "mongoose": "^8.4.1",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}
