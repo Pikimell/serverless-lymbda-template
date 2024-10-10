@@ -8,11 +8,11 @@ export const ctrlWrapper = (controller, ...middleware) => {
     try {
       initMongoDB();
 
-      parseJson(event, context);
+      parseJson(event);
       parseIP(event);
       parseDevice(event);
 
-      for (let callback of middleware) {
+      for (const callback of middleware) {
         await callback(event, context);
       }
 
