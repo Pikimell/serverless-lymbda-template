@@ -17,34 +17,17 @@ provider:
   timeout: 20
 
 functions:
-  templateGet:
-    handler: src/handlers/templates/getTemplateHandler.getTemplateHandler
+  authLogin:
+    handler: src/handlers/authHandlers.loginHandler
     events:
       - http:
-          path: template
+          path: login
           method: get
           cors: true
-
-  templatePost:
-    handler: src/handlers/templates/createTemplateHandler.createTemplateHandler
+  authRefresh:
+    handler: src/handlers/authHandlers.refreshHandler
     events:
       - http:
-          path: templates
-          method: post
-          cors: true
-
-  templatePut:
-    handler: src/handlers/templates/putTemplateHandler.putTemplateHandler
-    events:
-      - http:
-          path: templates/{templateId}
-          method: put
-          cors: true
-
-  templateDelete:
-    handler: src/handlers/templates/deleteTemplateHandler.deleteTemplateHandler
-    events:
-      - http:
-          path: templates/{templateId}
-          method: delete
+          path: refresh
+          method: get
           cors: true

@@ -3,7 +3,7 @@ import { initMongoDB } from './db/initMongoDb.js';
 export async function initConnection(event, context) {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  await initMongoDB();
+  // await initMongoDB();
 
   return {
     statusCode: 200,
