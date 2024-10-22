@@ -17,7 +17,7 @@ export const loginController = async (event, context) => {
 
   const result = { accessToken: 234 };
 
-  return response(200)(result, { 'Set-Cookie': cookies });
+  return response(200)(result, null, { cookies });
 };
 
 export const logoutController = async (event, context) => {
@@ -30,11 +30,18 @@ export const logoutController = async (event, context) => {
 };
 
 export const refreshController = async (event, context) => {
-  const cookies = event.headers.Cookie || '';
+  const oldCookies = event.headers.Cookie || '';
 
-  console.log('Cookies:', cookies);
+  const cookies = [
+    `refreshToken=${123};HttpOnly; Expires=${new Date(
+      Date.now() + ONE_DAY,
+    ).toUTCString()}`,
+    `sessionId=${234}; HttpOnly; Expires=${new Date(
+      Date.now() + ONE_MONTH,
+    ).toUTCString()}`,
+  ];
 
-  return response(200)(cookies);
+  return response(200)(oldCookies, null, { cookies });
 };
 
 export const requestResetEmailController = async (event, context) => {

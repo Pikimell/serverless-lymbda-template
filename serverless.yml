@@ -22,12 +22,28 @@ functions:
     events:
       - http:
           path: login
-          method: get
-          cors: true
+          method: post
+          cors:
+            origin: http://localhost:5173
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
+            methods:
+              - OPTIONS
+              - POST
   authRefresh:
     handler: src/handlers/authHandlers.refreshHandler
     events:
       - http:
           path: refresh
-          method: get
-          cors: true
+          method: post
+          cors:
+            origin: http://localhost:5173
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
+            methods:
+              - OPTIONS
+              - POST

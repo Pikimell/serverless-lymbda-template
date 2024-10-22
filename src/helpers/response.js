@@ -10,7 +10,7 @@ export function response(status) {
         ...headers,
       },
       body: JSON.stringify(data),
-      ...options,
+      multiValueHeaders: { 'Set-Cookie': options.cookies || [] },
     };
   };
 }
