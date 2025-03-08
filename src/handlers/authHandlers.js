@@ -1,4 +1,4 @@
-import { ctrlWrapper } from '../../utils/ctrlWrapper.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import * as authControllers from '../controllers/authController.js';
 
 export const registerUserHandler = async (event, context) => {

@@ -1,19 +1,19 @@
-org: author
-service: AWS-BACKEND
+org: pikimell
+service: auth-service
 
 frameworkVersion: '4'
 
 plugins:
-  - serverless-bundle
   - serverless-offline
-  - serverless-dotenv-plugin
+
+useDotenv: true
 
 provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-2
   stage: dev
-  profile: serverlessTemplateUser
+  profile: serverlessUser
   timeout: 20
 
 functions:

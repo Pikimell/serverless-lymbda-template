@@ -1,6 +1,6 @@
-import { CLIENT_ID, USER_POOL_ID } from '../helpers/constants';
-const AWS = await import('aws-sdk');
-const AmazonCognitoIdentity = await import('amazon-cognito-identity-js');
+import { CLIENT_ID, USER_POOL_ID } from '../helpers/constants.js';
+import AWS from 'aws-sdk';
+import AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 
 const poolData = {
   UserPoolId: USER_POOL_ID,
