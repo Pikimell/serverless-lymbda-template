@@ -1,57 +1,91 @@
 import { ONE_DAY, ONE_MONTH } from '../helpers/constants.js';
 import { response } from '../helpers/response.js';
+import * as authServices from '../services/authService.js';
+
+export const registerUserController = async (event, context) => {
+  try {
+    const { email, password, group } = event.body;
+    const result = await authServices.registerUserService({
+      email,
+      password,
+      group,
+    });
+    return response(201)(result);
+  } catch (error) {
+    return response(400)({ message: error.message });
+  }
+};
 
 export const loginController = async (event, context) => {
-  const { login, password } = event.body;
+  try {
+    const { email, password } = event.body;
 
-  const session = await loginUser(login, password);
+    const session = await authServices.loginService({ email, password });
 
-  const cookies = [
-    `refreshToken=${session.refreshToken}; HttpOnly; Expires=${new Date(
-      Date.now() + ONE_DAY,
-    ).toUTCString()}`,
-    `sessionId=${session._id}; HttpOnly; Expires=${new Date(
-      Date.now() + ONE_MONTH,
-    ).toUTCString()}`,
-  ];
+    const cookies = [
+      `refreshToken=${session.refreshToken}; HttpOnly; Expires=${new Date(
+        Date.now() + ONE_MONTH,
+      ).toUTCString()}; Secure; SameSite=Strict`,
+      `sessionId=${session.idToken}; HttpOnly; Expires=${new Date(
+        Date.now() + ONE_DAY,
+      ).toUTCString()}; Secure; SameSite=Strict`,
+    ];
 
-  const result = { accessToken: session.accessToken };
+    const result = { accessToken: session.accessToken };
 
-  return response(200)(result, { 'Set-Cookie': cookies });
+    return response(200)(result, { 'Set-Cookie': cookies });
+  } catch (error) {
+    return response(400)({ message: error.message });
+  }
 };
 
 export const logoutController = async (event, context) => {
-  const { id } = event.pathParameters;
-  const {} = event.queryStringParameters;
-  const {} = JSON.parse(event.body);
-
-  const result = await templateService();
-  return response(200)(result);
+  try {
+    await authServices.logoutService();
+    return response(200)({ message: 'Logged out successfully' });
+  } catch (error) {
+    return response(400)({ message: error.message });
+  }
 };
 
 export const refreshController = async (event, context) => {
-  const { id } = event.pathParameters;
-  const {} = event.queryStringParameters;
-  const {} = JSON.parse(event.body);
+  try {
+    const session = await authServices.refreshService();
 
-  const result = await templateService();
-  return response(200)(result);
+    const cookies = [
+      `refreshToken=${session.refreshToken}; HttpOnly; Expires=${new Date(
+        Date.now() + ONE_MONTH,
+      ).toUTCString()}; Secure; SameSite=Strict`,
+      `sessionId=${session.idToken}; HttpOnly; Expires=${new Date(
+        Date.now() + ONE_DAY,
+      ).toUTCString()}; Secure; SameSite=Strict`,
+    ];
+
+    return response(200)(
+      { accessToken: session.accessToken },
+      { 'Set-Cookie': cookies },
+    );
+  } catch (error) {
+    return response(400)({ message: error.message });
+  }
 };
 
 export const requestResetEmailController = async (event, context) => {
-  const { id } = event.pathParameters;
-  const {} = event.queryStringParameters;
-  const {} = JSON.parse(event.body);
-
-  const result = await templateService();
-  return response(200)(result);
+  try {
+    const { email } = event.body;
+    await authServices.requestResetEmailService(email);
+    return response(200)({ message: 'Password reset email sent' });
+  } catch (error) {
+    return response(400)({ message: error.message });
+  }
 };
 
 export const resetPasswordController = async (event, context) => {
-  const { id } = event.pathParameters;
-  const {} = event.queryStringParameters;
-  const {} = JSON.parse(event.body);
-
-  const result = await templateService();
-  return response(200)(result);
+  try {
+    const { email, code, newPassword } = event.body;
+    await authServices.resetPasswordService({ email, code, newPassword });
+    return response(200)({ message: 'Password successfully reset' });
+  } catch (error) {
+    return response(400)({ message: error.message });
+  }
 };

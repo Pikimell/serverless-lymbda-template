@@ -17,34 +17,51 @@ provider:
   timeout: 20
 
 functions:
-  templateGet:
-    handler: src/handlers/templates/getTemplateHandler.getTemplateHandler
+  # === AUTHENTICATION ===
+  registerUser:
+    handler: src/handlers/authHandlers.registerUserHandler
     events:
       - http:
-          path: template
-          method: get
-          cors: true
-
-  templatePost:
-    handler: src/handlers/templates/createTemplateHandler.createTemplateHandler
-    events:
-      - http:
-          path: templates
+          path: auth/register
           method: post
           cors: true
 
-  templatePut:
-    handler: src/handlers/templates/putTemplateHandler.putTemplateHandler
+  login:
+    handler: src/handlers/authHandlers.loginHandler
     events:
       - http:
-          path: templates/{templateId}
-          method: put
+          path: auth/login
+          method: post
           cors: true
 
-  templateDelete:
-    handler: src/handlers/templates/deleteTemplateHandler.deleteTemplateHandler
+  logout:
+    handler: src/handlers/authHandlers.logoutHandler
     events:
       - http:
-          path: templates/{templateId}
-          method: delete
+          path: auth/logout
+          method: post
+          cors: true
+
+  refreshToken:
+    handler: src/handlers/authHandlers.refreshHandler
+    events:
+      - http:
+          path: auth/refresh
+          method: post
+          cors: true
+
+  requestResetEmail:
+    handler: src/handlers/authHandlers.requestResetEmailHandler
+    events:
+      - http:
+          path: auth/reset/request
+          method: post
+          cors: true
+
+  resetPassword:
+    handler: src/handlers/authHandlers.resetPasswordHandler
+    events:
+      - http:
+          path: auth/reset/confirm
+          method: post
           cors: true
