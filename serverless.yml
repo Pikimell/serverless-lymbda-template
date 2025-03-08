@@ -1,7 +1,7 @@
 org: author
 service: AWS-BACKEND
 
-frameworkVersion: '3'
+frameworkVersion: '4'
 
 plugins:
   - serverless-bundle
