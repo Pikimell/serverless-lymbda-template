@@ -13,7 +13,7 @@ provider:
   runtime: nodejs18.x
   region: us-east-2
   stage: dev
-  profile: serverlessTemplate
+  profile: serverlessTemplateUser
   timeout: 20
 
 functions:
