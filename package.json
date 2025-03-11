@@ -28,6 +28,7 @@
     "http-errors": "^2.0.0",
     "joi": "^17.13.1",
     "mongoose": "^8.4.1",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "useragent": "^2.3.0"
   }
 }
