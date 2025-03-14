@@ -66,3 +66,63 @@ This will start a local emulator of AWS Lambda and tunnel your requests to and f
 Now you can invoke the function as before, but this time the function will be executed locally. Now you can develop your function locally, invoke it, and see the results immediately without having to re-deploy.
 
 When you are done developing, don't forget to run `serverless deploy` to deploy the function to the cloud.
+
+
+---
+
+Щоб почати роботу з serverless на своєму комп’ютері та підключити доступ по accessKey, виконай такі кроки:
+
+1. Переконайся, що у тебе встановлений Node.js
+
+Перевір версію Node.js, використовуючи:
+
+node -v
+
+Якщо немає, встанови Node.js.
+
+2. Встанови Serverless Framework
+
+Якщо ти ще не встановив його, зроби це через npm:
+
+npm install -g serverless
+
+Переконайся, що встановлення успішне:
+
+serverless -v
+
+3. Налаштуй AWS Access Key
+
+У тебе повинні бути accessKey та secretKey, які можна створити в AWS IAM.
+
+Щоб додати їх у конфігурацію Serverless Framework:
+
+serverless config credentials --provider aws --key YOUR_ACCESS_KEY --secret YOUR_SECRET_KEY
+
+Якщо потрібно вказати певний профіль (наприклад, myprofile):
+
+serverless config credentials --provider aws --key YOUR_ACCESS_KEY --secret YOUR_SECRET_KEY --profile myprofile
+
+4. Перевір, чи правильно підключився AWS
+
+Виконай команду:
+
+aws sts get-caller-identity
+
+Якщо вона повертає дані про користувача, значить, все налаштовано правильно.
+
+5. Створи новий проєкт
+
+Наприклад, якщо хочеш зробити Serverless-проєкт на Node.js:
+
+serverless create --template aws-nodejs --path my-service
+cd my-service
+
+6. Розгорни функцію
+
+Переконайся, що в кореневій директорії є serverless.yml, а потім розгорни:
+
+serverless deploy
+
+Це створить необхідні ресурси в AWS.
+
+Якщо виникнуть помилки або потрібно щось налаштувати під специфічний профіль або регіон, дай знати!
