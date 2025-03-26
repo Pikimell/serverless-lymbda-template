@@ -1,6 +1,7 @@
 import { CLIENT_ID, USER_POOL_ID } from '../helpers/constants.js';
 import AWS from 'aws-sdk';
 import AmazonCognitoIdentity from 'amazon-cognito-identity-js';
+import { createUser } from './userService.js';
 
 const poolData = {
   UserPoolId: USER_POOL_ID,
@@ -49,9 +50,14 @@ export const registerUserService = async ({ email, password, group }) => {
             GroupName: group,
           })
           .promise()
-          .then(() =>
-            resolve({ message: 'User registered and added to group', userSub }),
-          )
+          .then(async () => {
+            await createUser({
+              nickname: email,
+              password,
+              cognitoSub: userSub,
+            });
+            resolve({ message: 'User registered and added to group', userSub });
+          })
           .catch((groupError) => {
             console.error('Помилка додавання до групи:', groupError);
             reject(groupError);
@@ -147,4 +153,49 @@ export const resetPasswordService = async ({ email, code, newPassword }) => {
       onFailure: (err) => reject(err),
     });
   });
+};
+
+// Підтвердження email після реєстрації
+export const confirmEmailService = async ({ email, code }) => {
+  return new Promise((resolve, reject) => {
+    const cognitoUser = getCognitoUser(email);
+    cognitoUser.confirmRegistration(code, true, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve({ message: 'Email successfully confirmed', result });
+    });
+  });
+};
+
+// Деактивація користувача
+export const disableUserService = async (email) => {
+  try {
+    await cognito
+      .adminDisableUser({
+        UserPoolId: USER_POOL_ID,
+        Username: email,
+      })
+      .promise();
+
+    return { message: 'User has been disabled successfully' };
+  } catch (err) {
+    throw new Error(`Failed to disable user: ${err.message}`);
+  }
+};
+
+// Активація користувача
+export const enableUserService = async (email) => {
+  try {
+    await cognito
+      .adminEnableUser({
+        UserPoolId: USER_POOL_ID,
+        Username: email,
+      })
+      .promise();
+
+    return { message: 'User has been enabled successfully' };
+  } catch (err) {
+    throw new Error(`Failed to enable user: ${err.message}`);
+  }
 };

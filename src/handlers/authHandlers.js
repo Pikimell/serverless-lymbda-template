@@ -30,3 +30,8 @@ export const resetPasswordHandler = async (event, context) => {
   const ctrl = ctrlWrapper(authControllers.resetPasswordController);
   return await ctrl(event, context);
 };
+
+export const confirmEmailHandler = async (event, context) => {
+  const ctrl = ctrlWrapper(authControllers.confirmEmailController);
+  return await ctrl(event, context);
+};

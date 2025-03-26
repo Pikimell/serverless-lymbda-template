@@ -1,16 +1,19 @@
 import { model, Schema } from 'mongoose';
 const userSchema = new Schema(
   {
+    cognitoSub: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     nickname: {
       type: String,
       required: true,
       unique: true,
     },
-    password: {},
-    gender: {
+    password: {
       type: String,
       required: true,
-      enum: ['Male', 'Female'],
     },
   },
   {

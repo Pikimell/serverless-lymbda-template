@@ -65,3 +65,19 @@ functions:
           path: auth/reset/confirm
           method: post
           cors: true
+
+  confirmEmail:
+    handler: src/handlers/authHandlers.confirmEmailHandler
+    events:
+      - http:
+          path: auth/confirm
+          method: post
+          cors: true
+
+  test:
+    handler: src/handlers/testHandler.testHandler
+    events:
+      - http:
+          path: test
+          method: get
+          cors: true

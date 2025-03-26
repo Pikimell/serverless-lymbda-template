@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^6.3.12",
+    "aws-jwt-verify": "^5.0.0",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.8.2",
     "http-errors": "^2.0.0",

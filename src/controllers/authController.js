@@ -89,3 +89,13 @@ export const resetPasswordController = async (event, context) => {
     return response(400)({ message: error.message });
   }
 };
+
+export const confirmEmailController = async (event, context) => {
+  try {
+    const { email, code } = event.body;
+    await authServices.confirmEmailService({ email, code });
+    return response(200)({ message: 'Email confirmed successfully' });
+  } catch (error) {
+    return response(400)({ message: error.message });
+  }
+};

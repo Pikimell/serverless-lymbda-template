@@ -1,7 +1,13 @@
 import createHttpError from 'http-errors';
+import { CognitoJwtVerifier } from 'aws-jwt-verify';
+import { CLIENT_ID, USER_POOL_ID } from '../helpers/constants.js';
+import { getUserByCognito } from '../services/userService.js';
 
-import { SessionsCollection } from '../db/models/session.js';
-import { UsersCollection } from '../db/models/user.js';
+const verifier = CognitoJwtVerifier.create({
+  userPoolId: USER_POOL_ID,
+  tokenUse: 'access',
+  clientId: CLIENT_ID,
+});
 
 export const authenticate = async (event, context) => {
   const authHeader = event.headers['Authorization'];
@@ -10,31 +16,23 @@ export const authenticate = async (event, context) => {
     throw createHttpError(401, 'Please provide Authorization header');
   }
 
-  const bearer = authHeader.split(' ')[0];
-  const token = authHeader.split(' ')[1];
+  const [bearer, token] = authHeader.split(' ');
 
   if (bearer !== 'Bearer' || !token) {
     throw createHttpError(401, 'Auth header should be of type Bearer');
   }
 
-  const session = await SessionsCollection.findOne({ accessToken: token });
+  console.log(token);
 
-  if (!session) {
-    throw createHttpError(401, 'Session not found');
+  try {
+    const payload = await verifier.verify(token);
+    const user = await getUserByCognito(payload.sub);
+    event.user = user;
+    event.typeAccount = payload['cognito:groups'][0];
+    console.log(user);
+  } catch (err) {
+    console.log(err);
+
+    throw createHttpError(401, 'Invalid token');
   }
-
-  const isAccessTokenExpired =
-    new Date() > new Date(session.accessTokenValidUntil);
-
-  if (isAccessTokenExpired) {
-    throw createHttpError(401, 'Access token expired');
-  }
-
-  const user = await UsersCollection.findById(session.userId);
-
-  if (!user) {
-    throw createHttpError(401, 'Login or Password is invalid');
-  }
-
-  event.user = user;
 };
