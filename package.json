@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "sls offline start",
+    "deploy": "sls deploy",
     "create_domen": "npx serverless create_domain",
     "push": "git add . && git commit -m 'update' && git push"
   },
