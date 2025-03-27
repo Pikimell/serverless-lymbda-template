@@ -4,6 +4,8 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "remove": "sls remove",
+    "deploy": "sls deploy",
     "start": "sls offline start",
     "push": "git add . && git commit -m 'update' && git push"
   },
@@ -17,18 +19,16 @@
     "url": "https://github.com/your-github"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5",
     "globals": "^15.3.0",
     "nodemon": "^3.1.0",
     "serverless": "^4.0.0",
     "serverless-offline": "^14.0.4"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "axios": "^1.7.2",
     "http-errors": "^2.0.0",
     "joi": "^17.13.1",
-    "mongoose": "^8.4.1",
-    "nodemailer": "^6.9.15",
-    "useragent": "^2.3.0"
+    "mongoose": "^8.4.1"
   }
 }
