@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "sls offline start",
+    "create_domen": "npx serverless create_domain",
     "push": "git add . && git commit -m 'update' && git push"
   },
   "repository": {
@@ -17,13 +18,14 @@
     "url": "https://github.com/Pikimell"
   },
   "devDependencies": {
-    "dotenv": "^16.4.7",
     "globals": "^15.3.0",
     "nodemon": "^3.1.9",
     "serverless": "^4.7.0",
+    "serverless-domain-manager": "^8.0.0",
     "serverless-offline": "^14.4.0"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "amazon-cognito-identity-js": "^6.3.12",
     "aws-jwt-verify": "^5.0.0",
     "aws-sdk": "^2.1692.0",

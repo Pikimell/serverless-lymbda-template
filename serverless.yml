@@ -5,8 +5,17 @@ frameworkVersion: '4'
 
 plugins:
   - serverless-offline
+  - serverless-domain-manager
 
 useDotenv: true
+
+custom:
+  customDomain:
+    domainName: api.pashchenko.store
+    basePath: auth
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+    certificateName: arn:aws:acm:us-east-1:884252207764:certificate/a02c8c87-b5ee-4657-aabb-8c39a95e983b
 
 provider:
   name: aws
@@ -15,6 +24,13 @@ provider:
   stage: dev
   profile: serverlessUser
   timeout: 20
+  environment:
+    MONGODB_USER: ${env:MONGODB_USER}
+    MONGODB_PASSWORD: ${env:MONGODB_PASSWORD}
+    MONGODB_URL: ${env:MONGODB_URL}
+    MONGODB_DB: ${env:MONGODB_DB}
+    COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
+    COGNITO_CLIENT_ID: ${env:COGNITO_CLIENT_ID}
 
 functions:
   # === AUTHENTICATION ===
@@ -22,7 +38,7 @@ functions:
     handler: src/handlers/authHandlers.registerUserHandler
     events:
       - http:
-          path: auth/register
+          path: register
           method: post
           cors: true
 
@@ -30,7 +46,7 @@ functions:
     handler: src/handlers/authHandlers.loginHandler
     events:
       - http:
-          path: auth/login
+          path: login
           method: post
           cors: true
 
@@ -38,7 +54,7 @@ functions:
     handler: src/handlers/authHandlers.logoutHandler
     events:
       - http:
-          path: auth/logout
+          path: logout
           method: post
           cors: true
 
@@ -46,7 +62,7 @@ functions:
     handler: src/handlers/authHandlers.refreshHandler
     events:
       - http:
-          path: auth/refresh
+          path: refresh
           method: post
           cors: true
 
@@ -54,7 +70,7 @@ functions:
     handler: src/handlers/authHandlers.requestResetEmailHandler
     events:
       - http:
-          path: auth/reset/request
+          path: reset/request
           method: post
           cors: true
 
@@ -62,7 +78,7 @@ functions:
     handler: src/handlers/authHandlers.resetPasswordHandler
     events:
       - http:
-          path: auth/reset/confirm
+          path: reset/confirm
           method: post
           cors: true
 
@@ -70,7 +86,7 @@ functions:
     handler: src/handlers/authHandlers.confirmEmailHandler
     events:
       - http:
-          path: auth/confirm
+          path: confirm
           method: post
           cors: true
 

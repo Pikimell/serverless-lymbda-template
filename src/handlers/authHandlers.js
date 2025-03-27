@@ -7,6 +7,8 @@ export const registerUserHandler = async (event, context) => {
 };
 
 export const loginHandler = async (event, context) => {
+  console.log('Login Handler');
+
   const ctrl = ctrlWrapper(authControllers.loginController);
   return await ctrl(event, context);
 };

@@ -71,9 +71,11 @@ export const registerUserService = async ({ email, password, group }) => {
 
 // Логін користувача
 export const loginService = async ({ email, password }) => {
+  console.log('Login Service');
   return new Promise((resolve, reject) => {
     getCognitoUser(email).authenticateUser(getAuthDetails(email, password), {
       onSuccess: (result) => {
+        console.log('Login Service result', result);
         resolve({
           accessToken: result.getAccessToken().getJwtToken(),
           idToken: result.getIdToken().getJwtToken(),
@@ -81,6 +83,7 @@ export const loginService = async ({ email, password }) => {
         });
       },
       onFailure: (err) => {
+        console.log('Login Service error', result);
         reject(err);
       },
     });

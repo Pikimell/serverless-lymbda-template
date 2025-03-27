@@ -7,3 +7,5 @@ export const ONE_MONTH = ONE_DAY * 31;
 
 export const USER_POOL_ID = env('COGNITO_USER_POOL_ID');
 export const CLIENT_ID = env('COGNITO_CLIENT_ID');
+
+console.log(USER_POOL_ID, CLIENT_ID);

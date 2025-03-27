@@ -18,6 +18,7 @@ export const registerUserController = async (event, context) => {
 
 export const loginController = async (event, context) => {
   try {
+    console.log('Login Controller');
     const { email, password } = event.body;
 
     const session = await authServices.loginService({ email, password });
@@ -28,12 +29,15 @@ export const loginController = async (event, context) => {
       ).toUTCString()}; Secure; SameSite=Strict`,
       `sessionId=${session.idToken}; HttpOnly; Expires=${new Date(
         Date.now() + ONE_DAY,
-      ).toUTCString()}; Secure; SameSite=Strict`,
+      ).toUTCString()}; Secure; SameSite=Strict;`,
     ];
 
     const result = { accessToken: session.accessToken };
 
-    return response(200)(result, { 'Set-Cookie': cookies });
+    const controllerResponse = response(200)(result, { 'Set-Cookie': cookies });
+
+    console.log('Controller result', controllerResponse);
+    return controllerResponse;
   } catch (error) {
     return response(400)({ message: error.message });
   }
@@ -42,7 +46,7 @@ export const loginController = async (event, context) => {
 export const logoutController = async (event, context) => {
   try {
     await authServices.logoutService();
-    return response(200)({ message: 'Logged out successfully' });
+    return response(200)({ message: 'Logged out successfully!' });
   } catch (error) {
     return response(400)({ message: error.message });
   }
@@ -94,7 +98,7 @@ export const confirmEmailController = async (event, context) => {
   try {
     const { email, code } = event.body;
     await authServices.confirmEmailService({ email, code });
-    return response(200)({ message: 'Email confirmed successfully' });
+    return response(200)({ message: 'Email confirmed successfully!' });
   } catch (error) {
     return response(400)({ message: error.message });
   }
