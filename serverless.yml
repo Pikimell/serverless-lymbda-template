@@ -1,4 +1,3 @@
-org: author
 service: AWS-BACKEND
 
 frameworkVersion: '4'
