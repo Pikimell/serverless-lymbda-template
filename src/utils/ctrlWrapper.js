@@ -6,7 +6,7 @@ import { parseDevice, parseIP } from '../middleware/parseIP.js';
 export const ctrlWrapper = (controller, ...middleware) => {
   return async (event, context) => {
     try {
-      initMongoDB();
+      await initMongoDB();
 
       parseJson(event);
       parseIP(event);
