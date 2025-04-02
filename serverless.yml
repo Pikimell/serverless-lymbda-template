@@ -4,6 +4,7 @@ frameworkVersion: '4'
 
 plugins:
   - serverless-offline
+  - serverless-prune-plugin
 
 useDotenv: true
 
@@ -13,7 +14,12 @@ provider:
   region: us-east-2
   stage: dev
   profile: serverlessTemplateUser
-  timeout: 20
+  timeout: 10
+
+custom:
+  prune: # автоматичне видалення старих версій
+    automatic: true
+    number: 3 # залишати останні 3 версії
 
 functions:
   templateGet:
