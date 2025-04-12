@@ -3,103 +3,76 @@ import { response } from '../helpers/response.js';
 import * as authServices from '../services/authService.js';
 
 export const registerUserController = async (event, context) => {
-  try {
-    const { email, password, group } = event.body;
-    const result = await authServices.registerUserService({
-      email,
-      password,
-      group,
-    });
-    return response(201)(result);
-  } catch (error) {
-    return response(400)({ message: error.message });
-  }
+  const { email, password, group } = event.body;
+  const result = await authServices.registerUserService({
+    email,
+    password,
+    group,
+  });
+  return response(201)(result);
 };
 
 export const loginController = async (event, context) => {
-  try {
-    console.log('Login Controller');
-    const { email, password } = event.body;
+  const { email, password } = event.body;
 
-    const session = await authServices.loginService({ email, password });
+  const session = await authServices.loginService({ email, password });
 
-    const cookies = [
-      `refreshToken=${session.refreshToken}; HttpOnly; Expires=${new Date(
-        Date.now() + ONE_MONTH,
-      ).toUTCString()}; Secure; SameSite=Strict`,
-      `sessionId=${session.idToken}; HttpOnly; Expires=${new Date(
-        Date.now() + ONE_DAY,
-      ).toUTCString()}; Secure; SameSite=Strict;`,
-    ];
+  const cookies = [
+    getCookie('refreshToken', session.refreshToken, ONE_MONTH),
+    getCookie('sessionId', session.idToken, ONE_DAY),
+  ];
 
-    const result = { accessToken: session.accessToken };
+  const headers = { 'Set-Cookie': cookies };
 
-    const controllerResponse = response(200)(result, { 'Set-Cookie': cookies });
+  const result = { accessToken: session.accessToken };
 
-    console.log('Controller result', controllerResponse);
-    return controllerResponse;
-  } catch (error) {
-    return response(400)({ message: error.message });
-  }
+  return response(200)(result, headers);
 };
 
 export const logoutController = async (event, context) => {
-  try {
-    await authServices.logoutService();
-    return response(200)({ message: 'Logged out successfully!' });
-  } catch (error) {
-    return response(400)({ message: error.message });
-  }
+  await authServices.logoutService();
+
+  const cookies = [
+    getCookie('refreshToken', 1, 0),
+    getCookie('sessionId', 1, 0),
+  ];
+
+  const headers = { 'Set-Cookie': cookies };
+
+  const result = { message: 'Logged out successfully!' };
+
+  return response(200)(result, headers);
 };
 
 export const refreshController = async (event, context) => {
-  try {
-    const session = await authServices.refreshService();
+  const session = await authServices.refreshService();
 
-    const cookies = [
-      `refreshToken=${session.refreshToken}; HttpOnly; Expires=${new Date(
-        Date.now() + ONE_MONTH,
-      ).toUTCString()}; Secure; SameSite=Strict`,
-      `sessionId=${session.idToken}; HttpOnly; Expires=${new Date(
-        Date.now() + ONE_DAY,
-      ).toUTCString()}; Secure; SameSite=Strict`,
-    ];
+  const cookies = [
+    getCookie('refreshToken', session.refreshToken, ONE_MONTH),
+    getCookie('sessionId', session.idToken, ONE_DAY),
+  ];
 
-    return response(200)(
-      { accessToken: session.accessToken },
-      { 'Set-Cookie': cookies },
-    );
-  } catch (error) {
-    return response(400)({ message: error.message });
-  }
+  const headers = { 'Set-Cookie': cookies };
+
+  const result = { accessToken: session.accessToken };
+
+  return response(200)(result, headers);
 };
 
 export const requestResetEmailController = async (event, context) => {
-  try {
-    const { email } = event.body;
-    await authServices.requestResetEmailService(email);
-    return response(200)({ message: 'Password reset email sent' });
-  } catch (error) {
-    return response(400)({ message: error.message });
-  }
+  const { email } = event.body;
+  await authServices.requestResetEmailService(email);
+  return response(200)({ message: 'Password reset email sent' });
 };
 
 export const resetPasswordController = async (event, context) => {
-  try {
-    const { email, code, newPassword } = event.body;
-    await authServices.resetPasswordService({ email, code, newPassword });
-    return response(200)({ message: 'Password successfully reset' });
-  } catch (error) {
-    return response(400)({ message: error.message });
-  }
+  const { email, code, newPassword } = event.body;
+  await authServices.resetPasswordService({ email, code, newPassword });
+  return response(200)({ message: 'Password successfully reset' });
 };
 
 export const confirmEmailController = async (event, context) => {
-  try {
-    const { email, code } = event.body;
-    await authServices.confirmEmailService({ email, code });
-    return response(200)({ message: 'Email confirmed successfully!' });
-  } catch (error) {
-    return response(400)({ message: error.message });
-  }
+  const { email, code } = event.body;
+  await authServices.confirmEmailService({ email, code });
+  return response(200)({ message: 'Email confirmed successfully!' });
 };
