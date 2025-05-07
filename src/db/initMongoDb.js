@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
-
 import { env } from '../utils/env.js';
 
+let cachedDb = null;
+
 export const initMongoDB = async () => {
-  if (dbInfo.connected) {
+  if (cachedDb && mongoose.connection.readyState === 1) {
     console.log('Already connected!');
     return;
   }
@@ -14,18 +15,14 @@ export const initMongoDB = async () => {
     const url = env('MONGODB_URL');
     const db = env('MONGODB_DB');
 
-    await mongoose.connect(
+    const connection = await mongoose.connect(
       `mongodb+srv://${user}:${pwd}@${url}/${db}?retryWrites=true&w=majority&ssl=true`,
     );
 
     console.log('Mongo connection successfully established!');
-    dbInfo.connected = true;
+    cachedDb = connection;
   } catch (e) {
     console.log('Error while setting up mongo connection', e);
     throw e;
   }
-};
-
-export const dbInfo = {
-  connected: false,
 };
