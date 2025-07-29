@@ -9,13 +9,13 @@ plugins:
 
 useDotenv: true
 
-custom:
-  customDomain:
-    domainName: api.pashchenko.store
-    basePath: auth
-    stage: ${self:provider.stage}
-    createRoute53Record: true
-    certificateName: arn:aws:acm:us-east-1:884252207764:certificate/a02c8c87-b5ee-4657-aabb-8c39a95e983b
+#custom:
+#  customDomain:
+#    domainName: api.pashchenko.store
+#    basePath: auth
+#    stage: ${self:provider.stage}
+#    createRoute53Record: true
+#    certificateName: arn:aws:acm:us-east-1:884252207764:certificate/a02c8c87-b5ee-4657-aabb-8c39a95e983b
 
 provider:
   name: aws
