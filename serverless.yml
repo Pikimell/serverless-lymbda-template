@@ -19,7 +19,7 @@ useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs22.x
   region: us-east-2
   stage: dev
   profile: serverlessUser
@@ -31,6 +31,11 @@ provider:
     MONGODB_DB: ${env:MONGODB_DB}
     COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
     COGNITO_CLIENT_ID: ${env:COGNITO_CLIENT_ID}
+
+custom:
+  prune: # автоматичне видалення старих версій
+    automatic: true
+    number: 3 # залишати останні 3 версії
 
 functions:
   # === AUTHENTICATION ===
